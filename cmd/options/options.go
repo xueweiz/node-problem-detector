@@ -24,18 +24,15 @@ import (
 	"net/url"
 
 	"github.com/spf13/pflag"
+
+	"k8s.io/node-problem-detector/pkg/problemdaemon"
+	"k8s.io/node-problem-detector/pkg/types"
 )
 
 // NodeProblemDetectorOptions contains node problem detector command line and application options.
 type NodeProblemDetectorOptions struct {
 	// command line options
 
-	// SystemLogMonitorConfigPaths specifies the list of paths to system log monitor configuration
-	// files.
-	SystemLogMonitorConfigPaths []string
-	// CustomPluginMonitorConfigPaths specifies the list of paths to custom plugin monitor configuration
-	// files.
-	CustomPluginMonitorConfigPaths []string
 	// PrintVersion is the flag determining whether version information is printed.
 	PrintVersion bool
 	// HostnameOverride specifies custom node name used to override hostname.
@@ -53,6 +50,17 @@ type NodeProblemDetectorOptions struct {
 	// ApiServerOverride is the custom URI used to connect to Kubernetes ApiServer.
 	ApiServerOverride string
 
+	// problem daemon options
+
+	// SystemLogMonitorConfigPaths specifies the list of paths to system log monitor configuration
+	// files.
+	SystemLogMonitorConfigPaths []string
+	// CustomPluginMonitorConfigPaths specifies the list of paths to custom plugin monitor configuration
+	// files.
+	CustomPluginMonitorConfigPaths []string
+	// MonitorsConfigs specifies the list of paths to configuration files for each monitor.
+	MonitorsConfigs types.ProblemDaemonConfigMap
+
 	// application options
 
 	// NodeName is the node name used to communicate with Kubernetes ApiServer.
@@ -60,7 +68,7 @@ type NodeProblemDetectorOptions struct {
 }
 
 func NewNodeProblemDetectorOptions() *NodeProblemDetectorOptions {
-	return &NodeProblemDetectorOptions{}
+	return &NodeProblemDetectorOptions{MonitorsConfigs: types.ProblemDaemonConfigMap{}}
 }
 
 // AddFlags adds node problem detector command line options to pflag.
@@ -79,6 +87,17 @@ func (npdo *NodeProblemDetectorOptions) AddFlags(fs *pflag.FlagSet) {
 		20256, "The port to bind the node problem detector server. Use 0 to disable.")
 	fs.StringVar(&npdo.ServerAddress, "address",
 		"127.0.0.1", "The address to bind the node problem detector server.")
+
+	for _, problemDaemonName := range problemdaemon.GetProblemDaemonNames() {
+		npdo.MonitorsConfigs[problemDaemonName] = &[]string{}
+		fs.StringSliceVar(
+			npdo.MonitorsConfigs[problemDaemonName],
+			"config."+string(problemDaemonName),
+			[]string{},
+			fmt.Sprintf("Comma separated configurations for %v monitor. %v",
+				problemDaemonName,
+				problemdaemon.GetProblemDaemonHandler(problemDaemonName).CmdOptionDescription))
+	}
 }
 
 // ValidOrDie validates node problem detector command line options.
@@ -89,6 +108,12 @@ func (npdo *NodeProblemDetectorOptions) ValidOrDie() {
 	}
 	if len(npdo.SystemLogMonitorConfigPaths) == 0 && len(npdo.CustomPluginMonitorConfigPaths) == 0 {
 		panic(fmt.Sprintf("Either --system-log-monitors or --custom-plugin-monitors is required"))
+	}
+
+	for problemDaemonName, configs := range npdo.MonitorsConfigs {
+		if configs == nil {
+			panic(fmt.Sprintf("nil config for problem daemon %q. This should never happen, might indicates bug in pflag.", problemDaemonName))
+		}
 	}
 }
 

@@ -113,3 +113,20 @@ type Exporter interface {
 	// Export problems to the control plane.
 	ExportProblems(*Status)
 }
+
+// ProblemDaemonType is the type of the problem daemon.
+// One type of problem daemon may be used to initialize multiple problem daemon instances.
+type ProblemDaemonType string
+
+// ProblemDaemonConfigMap represents configurations on all types of problem daemons:
+// 1) Each key represents a type of problem daemon.
+// 2) Each value represents the configurations to that type of problem daemon.
+type ProblemDaemonConfigMap map[ProblemDaemonType]*[]string
+
+// ProblemDaemonHandler represents the initialization handler for a type problem daemon.
+type ProblemDaemonHandler struct {
+	// Factory initializes a problem daemon instance.
+	Factory func(string) Monitor
+	// CmdOptionDescription explains how to configure the problem daemon from command line arguments.
+	CmdOptionDescription string
+}
