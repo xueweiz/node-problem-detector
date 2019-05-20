@@ -27,6 +27,7 @@ import (
 	"k8s.io/node-problem-detector/pkg/k8sexporter"
 	"k8s.io/node-problem-detector/pkg/problemdaemon"
 	"k8s.io/node-problem-detector/pkg/problemdetector"
+	"k8s.io/node-problem-detector/pkg/prometheusexporter"
 	"k8s.io/node-problem-detector/pkg/systemlogmonitor"
 	"k8s.io/node-problem-detector/pkg/types"
 	"k8s.io/node-problem-detector/pkg/version"
@@ -68,6 +69,9 @@ func main() {
 	exporters := []types.Exporter{}
 	if ke := k8sexporter.NewExporterOrDie(npdo); ke != nil {
 		exporters = append(exporters, ke)
+	}
+	if pe := prometheusexporter.NewExporterOrDie(npdo); pe != nil {
+		exporters = append(exporters, pe)
 	}
 
 	if len(exporters) == 0 {
