@@ -31,6 +31,8 @@ import (
 	"k8s.io/node-problem-detector/pkg/systemlogmonitor"
 	"k8s.io/node-problem-detector/pkg/types"
 	"k8s.io/node-problem-detector/pkg/version"
+
+	_ "k8s.io/node-problem-detector/pkg/systemstatsmonitor"
 )
 
 func main() {
