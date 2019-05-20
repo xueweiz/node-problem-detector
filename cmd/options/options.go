@@ -36,8 +36,6 @@ type NodeProblemDetectorOptions struct {
 	// CustomPluginMonitorConfigPaths specifies the list of paths to custom plugin monitor configuration
 	// files.
 	CustomPluginMonitorConfigPaths []string
-	// ApiServerOverride is the custom URI used to connect to Kubernetes ApiServer.
-	ApiServerOverride string
 	// PrintVersion is the flag determining whether version information is printed.
 	PrintVersion bool
 	// HostnameOverride specifies custom node name used to override hostname.
@@ -46,6 +44,14 @@ type NodeProblemDetectorOptions struct {
 	ServerPort int
 	// ServerAddress is the address to bind the node problem detector server.
 	ServerAddress string
+
+	// exporter options
+
+	// k8sExporter options
+	// EnableK8sExporter is the flag determining whether to report to Kubernetes.
+	EnableK8sExporter bool
+	// ApiServerOverride is the custom URI used to connect to Kubernetes ApiServer.
+	ApiServerOverride string
 
 	// application options
 
@@ -63,6 +69,7 @@ func (npdo *NodeProblemDetectorOptions) AddFlags(fs *pflag.FlagSet) {
 		[]string{}, "List of paths to system log monitor config files, comma separated.")
 	fs.StringSliceVar(&npdo.CustomPluginMonitorConfigPaths, "custom-plugin-monitors",
 		[]string{}, "List of paths to custom plugin monitor config files, comma separated.")
+	fs.BoolVar(&npdo.EnableK8sExporter, "enable-k8s-exporter", true, "Enables reporting to Kubernetes.")
 	fs.StringVar(&npdo.ApiServerOverride, "apiserver-override",
 		"", "Custom URI used to connect to Kubernetes ApiServer")
 	fs.BoolVar(&npdo.PrintVersion, "version", false, "Print version information and quit")
