@@ -25,6 +25,7 @@ import (
 	"k8s.io/node-problem-detector/cmd/options"
 	"k8s.io/node-problem-detector/pkg/custompluginmonitor"
 	"k8s.io/node-problem-detector/pkg/k8sexporter"
+	"k8s.io/node-problem-detector/pkg/problemdaemon"
 	"k8s.io/node-problem-detector/pkg/problemdetector"
 	"k8s.io/node-problem-detector/pkg/systemlogmonitor"
 	"k8s.io/node-problem-detector/pkg/types"
@@ -46,23 +47,21 @@ func main() {
 
 	npdo.ValidOrDie()
 
-	monitors := make(map[string]types.Monitor)
+	// Initialize problem daemons.
+	problemDaemons := problemdaemon.NewProblemDaemons(npdo.MonitorsConfigs)
+
+	// Legacy per-monitor configuration.
+	// This section is kept so that existing command line option still works on NPD.
+	// TODO(xueweiz): when NPD's refactoring is finished, remove legacy configuration.
 	for _, config := range npdo.SystemLogMonitorConfigPaths {
-		if _, ok := monitors[config]; ok {
-			// Skip the config if it's duplicated.
-			glog.Warningf("Duplicated monitor configuration %q", config)
-			continue
-		}
-		monitors[config] = systemlogmonitor.NewLogMonitorOrDie(config)
+		problemDaemons = append(problemDaemons, systemlogmonitor.NewLogMonitorOrDie(config))
+	}
+	for _, config := range npdo.CustomPluginMonitorConfigPaths {
+		problemDaemons = append(problemDaemons, custompluginmonitor.NewCustomPluginMonitorOrDie(config))
 	}
 
-	for _, config := range npdo.CustomPluginMonitorConfigPaths {
-		if _, ok := monitors[config]; ok {
-			// Skip the config if it's duplicated.
-			glog.Warningf("Duplicated monitor configuration %q", config)
-			continue
-		}
-		monitors[config] = custompluginmonitor.NewCustomPluginMonitorOrDie(config)
+	if len(problemDaemons) == 0 {
+		glog.Fatalf("No problem daemon is successfully setup")
 	}
 
 	// Initialize exporters.
@@ -76,7 +75,7 @@ func main() {
 	}
 
 	// Initialize NPD core.
-	p := problemdetector.NewProblemDetector(monitors, exporters)
+	p := problemdetector.NewProblemDetector(problemDaemons, exporters)
 
 	if err := p.Run(); err != nil {
 		glog.Fatalf("Problem detector failed with error: %v", err)

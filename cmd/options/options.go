@@ -74,9 +74,9 @@ func NewNodeProblemDetectorOptions() *NodeProblemDetectorOptions {
 // AddFlags adds node problem detector command line options to pflag.
 func (npdo *NodeProblemDetectorOptions) AddFlags(fs *pflag.FlagSet) {
 	fs.StringSliceVar(&npdo.SystemLogMonitorConfigPaths, "system-log-monitors",
-		[]string{}, "List of paths to system log monitor config files, comma separated.")
+		[]string{}, "List of paths to system log monitor config files, comma separated. This option will be replaced by --config.system-log-monitor.")
 	fs.StringSliceVar(&npdo.CustomPluginMonitorConfigPaths, "custom-plugin-monitors",
-		[]string{}, "List of paths to custom plugin monitor config files, comma separated.")
+		[]string{}, "List of paths to custom plugin monitor config files, comma separated. This option will be replaced by --config.custom-plugin-monitor.")
 	fs.BoolVar(&npdo.EnableK8sExporter, "enable-k8s-exporter", true, "Enables reporting to Kubernetes.")
 	fs.StringVar(&npdo.ApiServerOverride, "apiserver-override",
 		"", "Custom URI used to connect to Kubernetes ApiServer")
@@ -105,9 +105,6 @@ func (npdo *NodeProblemDetectorOptions) ValidOrDie() {
 	if _, err := url.Parse(npdo.ApiServerOverride); err != nil {
 		panic(fmt.Sprintf("apiserver-override %q is not a valid HTTP URI: %v",
 			npdo.ApiServerOverride, err))
-	}
-	if len(npdo.SystemLogMonitorConfigPaths) == 0 && len(npdo.CustomPluginMonitorConfigPaths) == 0 {
-		panic(fmt.Sprintf("Either --system-log-monitors or --custom-plugin-monitors is required"))
 	}
 
 	for problemDaemonName, configs := range npdo.MonitorsConfigs {
