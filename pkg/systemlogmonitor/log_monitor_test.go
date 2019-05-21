@@ -17,9 +17,10 @@ limitations under the License.
 package systemlogmonitor
 
 import (
+	"bytes"
 	"fmt"
 	"reflect"
-	"runtime"
+	"runtime/pprof"
 	"testing"
 	"time"
 
@@ -145,11 +146,24 @@ func TestGenerateStatus(t *testing.T) {
 }
 
 func TestGoroutineLeak(t *testing.T) {
-	orignal := runtime.NumGoroutine()
+	original_prof := pprof.Lookup("goroutine")
+	original := original_prof.Count()
+	original_buf := new(bytes.Buffer)
+	original_prof.WriteTo(original_buf, 1)
+	original_stacktraces := original_buf.String()
+
 	f := watchertest.NewFakeLogWatcher(10)
 	f.InjectError(fmt.Errorf("unexpected error"))
 	l := &logMonitor{watcher: f}
 	_, err := l.Start()
 	assert.Error(t, err)
-	assert.Equal(t, orignal, runtime.NumGoroutine())
+
+	end_prof := pprof.Lookup("goroutine")
+	end := end_prof.Count()
+	end_buf := new(bytes.Buffer)
+	end_prof.WriteTo(end_buf, 1)
+	end_stacktraces := end_buf.String()
+
+	assert.Equal(t, original, end,
+		"original stacktraces:\n%v\nend stacktraces:\n%v", original_stacktraces, end_stacktraces)
 }
