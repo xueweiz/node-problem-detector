@@ -21,18 +21,21 @@ require (
 	github.com/go-openapi/swag v0.0.0-20160704191624-1d0bd113de87 // indirect
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
 	github.com/golang/groupcache v0.0.0-20150125180832-604ed5785183 // indirect
+	github.com/golang/protobuf v1.3.1 // indirect
 	github.com/google/btree v1.0.0 // indirect
 	github.com/google/cadvisor v0.33.0
+	github.com/google/go-cmp v0.3.0 // indirect
 	github.com/google/gofuzz v0.0.0-20161122191042-44d81051d367 // indirect
 	github.com/googleapis/gnostic v0.1.0 // indirect
 	github.com/gregjones/httpcache v0.0.0-20170926212834-c1f8028e62ad // indirect
+	github.com/hashicorp/golang-lru v0.5.1 // indirect
 	github.com/howeyc/gopass v0.0.0-20160826175423-3ca23474a7c7 // indirect
 	github.com/imdario/mergo v0.0.0-20141206190957-6633656539c1 // indirect
 	github.com/json-iterator/go v0.0.0-20171130024224-051434fab7e0 // indirect
 	github.com/juju/ratelimit v0.0.0-20170523012141-5b9ff8664717 // indirect
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/mailru/easyjson v0.0.0-20160728113105-d5b7844b561a // indirect
-	github.com/onsi/ginkgo v1.8.0 // indirect
+	github.com/onsi/ginkgo v1.8.0
 	github.com/onsi/gomega v1.5.0 // indirect
 	github.com/peterbourgon/diskv v2.0.1+incompatible // indirect
 	github.com/prometheus/client_model v0.0.0-20190129233127-fd36f4220a90 // indirect
@@ -43,10 +46,12 @@ require (
 	github.com/spf13/pflag v1.0.3
 	github.com/stretchr/testify v1.3.0
 	github.com/tedsuo/ifrit v0.0.0-20180802180643-bea94bb476cc // indirect
-	go.opencensus.io v0.22.0
-	golang.org/x/crypto v0.0.0-20190605123033-f99c8df09eb5 // indirect
+	go.opencensus.io v0.21.0
 	golang.org/x/net v0.0.0-20190603091049-60506f45cf65 // indirect
-	golang.org/x/sys v0.0.0-20190602015325-4c4f7f33c9ed // indirect
+	golang.org/x/sys v0.0.0-20190306220234-b354f8bf4d9e // indirect
+	golang.org/x/text v0.3.2 // indirect
+	google.golang.org/genproto v0.0.0-20190425155659-357c62f0e4bb // indirect
+	google.golang.org/grpc v1.20.1 // indirect
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
 	gopkg.in/inf.v0 v0.9.0 // indirect
 	gopkg.in/yaml.v1 v1.0.0-20140924161607-9f9df34309c0 // indirect
