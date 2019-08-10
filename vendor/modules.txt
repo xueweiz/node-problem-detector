@@ -95,12 +95,12 @@ github.com/prometheus/common/model
 github.com/prometheus/common/internal/bitbucket.org/ww/goautoneg
 # github.com/prometheus/procfs v0.0.0-20190425082905-87a4384529e0
 github.com/prometheus/procfs
-# github.com/shirou/gopsutil v2.18.12+incompatible
+# github.com/shirou/gopsutil v0.0.0-20190601025009-5335e3fd506d
+github.com/shirou/gopsutil/process
 github.com/shirou/gopsutil/disk
 github.com/shirou/gopsutil/host
-github.com/shirou/gopsutil/internal/common
-github.com/shirou/gopsutil/process
 github.com/shirou/gopsutil/cpu
+github.com/shirou/gopsutil/internal/common
 github.com/shirou/gopsutil/mem
 github.com/shirou/gopsutil/net
 # github.com/shirou/w32 v0.0.0-20160930032740-bb4de0191aa4
@@ -186,8 +186,10 @@ k8s.io/api/storage/v1alpha1
 k8s.io/api/storage/v1beta1
 # k8s.io/apimachinery v0.0.0-20180126010752-19e3f5aa3adc
 k8s.io/apimachinery/pkg/util/clock
+k8s.io/apimachinery/pkg/util/wait
 k8s.io/apimachinery/pkg/apis/meta/v1
 k8s.io/apimachinery/pkg/types
+k8s.io/apimachinery/pkg/util/runtime
 k8s.io/apimachinery/pkg/api/resource
 k8s.io/apimachinery/pkg/runtime
 k8s.io/apimachinery/pkg/runtime/schema
@@ -200,7 +202,6 @@ k8s.io/apimachinery/pkg/watch
 k8s.io/apimachinery/pkg/runtime/serializer
 k8s.io/apimachinery/pkg/util/net
 k8s.io/apimachinery/pkg/api/errors
-k8s.io/apimachinery/pkg/util/runtime
 k8s.io/apimachinery/pkg/util/sets
 k8s.io/apimachinery/pkg/util/strategicpatch
 k8s.io/apimachinery/pkg/conversion/queryparams
@@ -208,7 +209,6 @@ k8s.io/apimachinery/pkg/util/errors
 k8s.io/apimachinery/pkg/util/json
 k8s.io/apimachinery/third_party/forked/golang/reflect
 k8s.io/apimachinery/pkg/util/validation
-k8s.io/apimachinery/pkg/util/wait
 k8s.io/apimachinery/pkg/api/meta
 k8s.io/apimachinery/pkg/version
 k8s.io/apimachinery/pkg/runtime/serializer/streaming
