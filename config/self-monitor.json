@@ -1,0 +1,14 @@
+{
+	"invokeInterval": "60s",
+	"metricsConfigs": {
+		"npd/cpu_total": {
+			"displayName": "npd/cpu_total"
+		},
+		"npd/memory": {
+			"displayName": "npd/memory"
+		},
+		"npd/peak_memory": {
+			"displayName": "npd/peak_memory"
+		}
+	}
+}
